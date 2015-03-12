@@ -67,15 +67,15 @@ define(['angularAMD'], function (angularAMD) {
 
 	        // Use quote from localStorage
 	        $scope.quote = storageFiles.quote;
-	    }
+	    }		
 
 	    // Hourly expiring temperature values in localStorage
 	    if (typeof storageFilesHour === "undefined" || storageFilesHour < currentHour) {
             storageFiles.hour = currentHour;
             
-			$http.get('http://api.openweathermap.org/data/2.5/weather?q=Helsinki&lang=fi')
+			$http.get('http://api.openweathermap.org/data/2.5/weather?q=Sibley,ia,us&lang=en')
 				.success(function(data, status, headers, config) {
-					var temp = Math.round(parseInt(data.main.temp) - 273.15, 2) + "°C";
+					var temp = Math.round(((parseInt(data.main.temp) - 273.15) * 9/5) + 32, 2) + "°F";
 					storageFiles.temp = temp;
 					$scope.temp = temp;
 
@@ -110,11 +110,11 @@ define(['angularAMD'], function (angularAMD) {
 			}
 		}
 
-		$scope.text = "Good " + $scope.getStateOfDay(moment().get('hour')) + ", today is " + moment().format('dddd DD.MM.YYYY') + ".";
+		$scope.text = "Good " + $scope.getStateOfDay(moment().get('hour')) + ", today is " + moment().format('dddd, MMMM DD, YYYY') + ".";
 		$scope.clock = moment().format('HH:mm');
 		$interval(function () { 
 			var hours = moment().get('hour');
-			$scope.text = "Good " + $scope.getStateOfDay(hours) + ", today is " + moment().format('dddd DD.MM.YYYY') + ".";
+			$scope.text = "Good " + $scope.getStateOfDay(moment().get('hour')) + ", today is " + moment().format('dddd, MMMM DD, YYYY') + ".";
 			$scope.clock = moment().format('HH:mm');
 		}, 1000);
 	});
